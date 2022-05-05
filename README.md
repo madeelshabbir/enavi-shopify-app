@@ -26,24 +26,6 @@ Make sure you have [Node.js](http://nodejs.org/) installed.
 3. Configure urls in Shopify App dashboard.
 4. Request the permissions for 'read_own_subscription_contracts, write_own_subscription_contracts'.
 
-Use the below commands to run the local server.
-
-```sh
-gh repo clone AbhinavPandey01/Membership-app # or clone your own fork
-cd Membership-app
-npm install
-npm run dev
-```
-
-Your app should now be running on https://xxxxxxxxxxxxxx.trycloudflare.com
-
-## Deploying to Heroku
-
-```
-heroku create
-git push heroku master
-heroku open
-```
 
 
 
