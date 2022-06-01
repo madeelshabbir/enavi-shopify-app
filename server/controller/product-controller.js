@@ -56,7 +56,7 @@ const productController = {
   */
   getProducts: async function(ctx, next) {
     const nProducts = 20;
-    var cursor = ctx && ctx.request.query.cursor ? ctx.request.query.cursor : ''
+    var cursor = ctx && ctx.request.query.cursor ? ctx.request.query.cursor : '',
     products;
 
     try {
