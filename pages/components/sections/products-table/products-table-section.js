@@ -2,7 +2,9 @@ import {
   Page,
   Card,
   Stack,
-  Pagination
+  Pagination,
+  TextField,
+  Button,
 } from "@shopify/polaris";
 import useSWR, { mutate } from "swr";
 
@@ -16,10 +18,9 @@ const appBaseUrl = HOST;
 var nestedProperty = require("nested-property");
 
 
-function getProductQueryString(cursor){
-  return `${appBaseUrl}/get-products?${(cursor && `cursor=${cursor}`) || ''}`;
+function getProductQueryString(cursor, term){
+  return `${appBaseUrl}/get-products?${(cursor && `cursor=${cursor}&`) || ''}${term && `term=${term}`}`;
 }
-
 
 function ProductsTableSection({restFetch, toggleMainLoader}) {
 
@@ -27,6 +28,7 @@ function ProductsTableSection({restFetch, toggleMainLoader}) {
     return "";
   });
 
+  const [searchQuery, setSearchQuery] = useState("");
 
   const [pageInfo, setPageInfo] = useState(function () {
     return { hasNextPage: true, hasPreviousPage: false, nextCursor: "" };
@@ -36,11 +38,11 @@ function ProductsTableSection({restFetch, toggleMainLoader}) {
   });
 
   const { data, error } = useSWR(
-    getProductQueryString(pageCursor), restFetchWrapper(restFetch)
+    getProductQueryString(pageCursor, searchQuery), restFetchWrapper(restFetch)
   );
 
   //Prefetch the next page.
-  useSWR(getProductQueryString(pageInfo.nextCursor), restFetchWrapper(restFetch));
+  useSWR(getProductQueryString(pageInfo.nextCursor, searchQuery), restFetchWrapper(restFetch));
 
 
   useEffect(() => {
@@ -88,6 +90,14 @@ function ProductsTableSection({restFetch, toggleMainLoader}) {
     await mutate(getProductQueryString(pageCursor));
   }
 
+  function handleSearchQueryChange(value) {
+    setSearchQuery(value);
+  }
+
+  function handleSearch() {
+    setCurrentPageCursor("");
+    setPrevPageCursor([]);
+  }
 
   return (
     <>
@@ -96,6 +106,20 @@ function ProductsTableSection({restFetch, toggleMainLoader}) {
       <>
         <Card>
             <>
+              <Card.Section>
+                <Stack>
+                  <Stack.Item>
+                    <TextField
+                      placeholder="Enter search query"
+                      value={searchQuery}
+                      onChange={handleSearchQueryChange}
+                    />
+                  </Stack.Item>
+                  <Stack.Item>
+                    <Button onClick={handleSearch}>Search</Button>
+                  </Stack.Item>
+                </Stack>
+              </Card.Section>
               <Card.Section>
               <ProductsTable
                 data={data}
