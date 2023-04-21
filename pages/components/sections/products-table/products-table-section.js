@@ -12,14 +12,10 @@ import {restFetchWrapper} from "../../../../react-utils/request-handler";
 import { useState, useEffect } from "react";
 import ProductsTable from "./components/products-table";
 
-
-const appBaseUrl = HOST;
-
 var nestedProperty = require("nested-property");
 
-
 function getProductQueryString(cursor, term){
-  return `${appBaseUrl}/get-products?${(cursor && `cursor=${cursor}&`) || ''}${term && `term=${term}`}`;
+  return `get-products?${(cursor && `cursor=${cursor}&`) || ''}${term && `term=${term}`}`;
 }
 
 function ProductsTableSection({restFetch, toggleMainLoader}) {
